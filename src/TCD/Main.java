@@ -1,5 +1,6 @@
 package TCD;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class Main {
@@ -21,17 +22,24 @@ public class Main {
             runTimes[i] = measureRun();
         }
 
-        System.out.println("Average time for extTimes: " + averageTime(extTimes));
-        System.out.println("Average time for runTimes: " + averageTime(runTimes) + "\n");
+        String[] threadTypes = {"ExtThread", "Runnable"};
+        long[] averageTimes = {(long) averageTime(extTimes), (long) averageTime(runTimes)};
+        long[] percentile50 = {percentile(extTimes, 0.50), percentile(runTimes, 0.50)};
+        long[] percentile90 = {percentile(extTimes, 0.90), percentile(runTimes, 0.90)};
+        long[] percentile99 = {percentile(extTimes, 0.99), percentile(runTimes, 0.99)};
 
-        System.out.println("For extTimes P50 = " + percentile(extTimes, 0.50));
-        System.out.println("For runTimes P50 = " + percentile(runTimes, 0.50) + " ns. \n");
-
-        System.out.println("For extTimes P90 = " + percentile(extTimes, 0.90));
-        System.out.println("For runTimes P90 = " + percentile(runTimes, 0.90) + " ns. \n");
-
-        System.out.println("For extTimes P99 = " + percentile(extTimes, 0.99));
-        System.out.println("For runTimes P99 = " + percentile(runTimes, 0.99) + " ns. \n");
+        try {
+            ExcelExport.exportResults(
+                    threadTypes,
+                    averageTimes,
+                    percentile50,
+                    percentile90,
+                    percentile99
+            );
+            System.out.println("Results exported successfully!");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static long measureExt() throws InterruptedException {
