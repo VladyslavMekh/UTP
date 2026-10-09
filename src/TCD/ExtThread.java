@@ -1,13 +1,19 @@
+package TCD;
+
 public class ExtThread extends Thread {
     private long objCreationTime;
     private long firstInstruction;
 
     public ExtThread() {
         objCreationTime = System.nanoTime();
-        firstInstruction = objCreationTime;
     }
 
-    public long getTime(long objCreationTime, long firstInstruction) {
-        return objCreationTime - firstInstruction;
+    @Override
+    public void run() {
+        firstInstruction = System.nanoTime();
+    }
+
+    public long getTime() {
+        return firstInstruction - objCreationTime;
     }
 }
