@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    static void main(String[] args) throws InterruptedException {
         final int WARMUP = 5000;
         final int N = 50000;
 
@@ -51,9 +51,7 @@ public class Main {
 
     public static double averageTime(long[] data) {
         long sum = 0;
-        for (int i = 0; i < data.length; i++) {
-            sum += data[i];
-        }
+        for (long element : data) sum += element;
         return (double) sum/data.length;
     }
 
