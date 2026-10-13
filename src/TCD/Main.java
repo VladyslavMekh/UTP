@@ -1,35 +1,39 @@
 package TCD;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class Main {
 
     static void main(String[] args) throws InterruptedException {
         final int WARMUP = 5000;
-        final int N = 50000;
+        final int[] N = {10000, 25000, 50000};
 
-        for (int i = 0; i < WARMUP; i++) {
-            measureExt();
-            measureRun();
-        }
+        ExcelPoiConverter converter = new ExcelPoiConverter();
 
-        long[] extTimes = new long[N];
-        long[] runTimes = new long[N];
+        for (int i = 0; i < N.length; i++) {
 
-        for (int i = 0; i < N; i++) {
-            extTimes[i] = measureExt();
-            runTimes[i] = measureRun();
-        }
+            for (int j = 0; j < WARMUP; j++) {
+                measureExt();
+                measureRun();
+            }
 
-        String[] threadTypes = {"ExtThread", "Runnable"};
-        long[] averageTimes = {(long) averageTime(extTimes), (long) averageTime(runTimes)};
-        long[] percentile50 = {percentile(extTimes, 0.50), percentile(runTimes, 0.50)};
-        long[] percentile90 = {percentile(extTimes, 0.90), percentile(runTimes, 0.90)};
-        long[] percentile99 = {percentile(extTimes, 0.99), percentile(runTimes, 0.99)};
+            long[] extTimes = new long[N[i]];
+            long[] runTimes = new long[N[i]];
 
-        try {
-            ExcelExport.exportResults(
+            for (int j = 0; j < N[i]; j++) {
+                extTimes[j] = measureExt();
+                runTimes[j] = measureRun();
+            }
+
+            String sheetName = "N = " + N[i];
+            String[] threadTypes = {"ExtThread", "Runnable"};
+            long[] averageTimes = {averageTime(extTimes), averageTime(runTimes)};
+            long[] percentile50 = {percentile(extTimes, 0.50), percentile(runTimes, 0.50)};
+            long[] percentile90 = {percentile(extTimes, 0.90), percentile(runTimes, 0.90)};
+            long[] percentile99 = {percentile(extTimes, 0.99), percentile(runTimes, 0.99)};
+
+            converter.createSheets(
+                    sheetName,
                     threadTypes,
                     averageTimes,
                     percentile50,
@@ -37,9 +41,8 @@ public class Main {
                     percentile99
             );
             System.out.println("Results exported successfully!");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+        converter.saveWorkbook();
     }
 
     public static long measureExt() throws InterruptedException {
@@ -57,10 +60,12 @@ public class Main {
         return runTask.getTime();
     }
 
-    public static double averageTime(long[] data) {
+    public static long averageTime(long[] data) {
         long sum = 0;
-        for (long element : data) sum += element;
-        return (double) sum/data.length;
+        for (long element : data) {
+            sum += element;
+        }
+        return sum/data.length;
     }
 
     public static long percentile(long[] data, double p) {
