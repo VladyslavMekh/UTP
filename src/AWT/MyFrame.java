@@ -5,16 +5,18 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class MyFrame extends Frame {
-    private Panel ballPanel;
+    private BallPanel ballPanel;
     private Panel buttonPanel;
     private Button addBall;
     private Button shakeBall;
 
     public MyFrame() {
-        ballPanel = new Panel();
+        ballPanel = new BallPanel();
         addBall = new Button("Add Ball");
         shakeBall = new Button("Shake Ball");
         buttonPanel = new Panel();
+
+        addBall.addActionListener(ballPanel);
 
         FlowLayout flowLayout = new FlowLayout();
         buttonPanel.setLayout(flowLayout);

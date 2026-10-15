@@ -9,7 +9,7 @@ import java.util.List;
 public class BallPanel extends Panel
     implements Runnable, ActionListener
 {
-    public List<Object> ballList;
+    public List<Ball> ballList;
 
     public BallPanel() {
         ballList = new ArrayList<>();
@@ -17,12 +17,16 @@ public class BallPanel extends Panel
     }
 
     public void paint(Graphics graphics) {
-
+        for (Ball element : ballList) {
+            element.draw(graphics);
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        Ball ball = new Ball(getWidth() / 2, getHeight() / 2) {
+        };
+        ballList.add(ball);
     }
 
     @Override
