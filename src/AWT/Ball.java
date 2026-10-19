@@ -12,9 +12,9 @@ public abstract class Ball
     public Ball(int x, int y) {
         this.x = x;
         this.y = y;
-        vx = -3;
-        vy = 3;
-        speed = 25;
+        vx = (int) (Math.random() * 7) - 3;
+        vy = (int) (Math.random() * 7) - 3;
+        speed = 20 + (int) (Math.random() * 11);
         thread = new Thread(this);
         thread.start();
     }
@@ -28,11 +28,49 @@ public abstract class Ball
         while (true) {
             x += vx;
             y += vy;
+
+            if (collidingX()) {
+                vx *= -1;
+                x += vx;
+
+                synchronized (thread) {
+                    try {
+                        thread.wait();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                }
+            }
+
+            if (collidingY()) {
+                vy *= -1;
+                y += vy;
+
+                synchronized (thread) {
+                    try {
+                        thread.wait();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                }
+            }
+
             try {
                 Thread.sleep(speed);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Thread.currentThread().interrupt();
             }
         }
     }
+
+    public void wakeUp() {
+        synchronized (thread) {
+            thread.notifyAll();
+        }
+    }
+
+    public abstract boolean collidingX();
+    public abstract boolean collidingY();
 }

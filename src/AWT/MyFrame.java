@@ -8,21 +8,22 @@ public class MyFrame extends Frame {
     private BallPanel ballPanel;
     private Panel buttonPanel;
     private Button addBall;
-    private Button shakeBall;
+    private Button shakePanel;
 
     public MyFrame() {
         ballPanel = new BallPanel();
         addBall = new Button("Add Ball");
-        shakeBall = new Button("Shake Ball");
+        shakePanel = new Button("Shake Balls");
         buttonPanel = new Panel();
 
         addBall.addActionListener(ballPanel);
+        shakePanel.addActionListener(e -> ballPanel.shake());
 
         FlowLayout flowLayout = new FlowLayout();
         buttonPanel.setLayout(flowLayout);
 
         buttonPanel.add(addBall);
-        buttonPanel.add(shakeBall);
+        buttonPanel.add(shakePanel);
 
         BorderLayout borderLayout = new BorderLayout();
         setLayout(borderLayout);
