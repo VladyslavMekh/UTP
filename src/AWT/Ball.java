@@ -33,9 +33,9 @@ public abstract class Ball
                 vx *= -1;
                 x += vx;
 
-                synchronized (thread) {
+                synchronized (MONITOR) {
                     try {
-                        thread.wait();
+                        MONITOR.wait();
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         return;
@@ -47,9 +47,9 @@ public abstract class Ball
                 vy *= -1;
                 y += vy;
 
-                synchronized (thread) {
+                synchronized (MONITOR) {
                     try {
-                        thread.wait();
+                        MONITOR.wait();
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                         return;
@@ -66,11 +66,13 @@ public abstract class Ball
     }
 
     public void wakeUp() {
-        synchronized (thread) {
+        synchronized (MONITOR) {
             thread.notifyAll();
         }
     }
 
     public abstract boolean collidingX();
     public abstract boolean collidingY();
+
+    static final Object MONITOR = new Object();
 }

@@ -51,8 +51,8 @@ public class BallPanel extends Panel
     }
 
     public void shake() {
-        for (Ball element : ballList) {
-            element.wakeUp();
+        synchronized (Ball.MONITOR) {
+            Ball.MONITOR.notifyAll();
         }
     }
 }
