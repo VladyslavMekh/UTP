@@ -37,28 +37,13 @@ public abstract class ScheduledBall  extends Ball {
             vx *= -1;
             x += vx;
             scheduledFuture.cancel(true);
-            synchronized (MONITOR) {
-                try {
-                    MONITOR.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-            }
         }
 
         if (collidingY()) {
             vy *= -1;
             y += vy;
             scheduledFuture.cancel(true);
-            synchronized (MONITOR) {
-                try {
-                    MONITOR.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-            }
+
         }
 
             try {
@@ -71,7 +56,7 @@ public abstract class ScheduledBall  extends Ball {
 
     @Override
     public void wakeUp() {
-        if (scheduledFuture == null)
+        if (scheduledFuture.isCancelled())
             scheduledFuture = scheduled.scheduleAtFixedRate(
                     this,
                     0,

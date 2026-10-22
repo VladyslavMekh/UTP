@@ -24,7 +24,9 @@ public class BallPanel extends Panel
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Ball ball = new Ball(getWidth() / 2, getHeight() / 2) {
+        ThreadBall threadBall = new ThreadBall(
+                getWidth() / 2, getHeight() / 2
+        ) {
             @Override
             public boolean collidingX() {
                 return x + vx < 5 || x + vx > BallPanel.this.getWidth() - 5;
@@ -35,7 +37,52 @@ public class BallPanel extends Panel
                 return y + vy < 5 || y + vy > BallPanel.this.getHeight() - 5;
             }
         };
-        ballList.add(ball);
+        ballList.add(threadBall);
+
+        ScheduledBall scheduledBall = new ScheduledBall(
+                getWidth() / 2, getHeight() / 2
+        ) {
+            @Override
+            public boolean collidingX() {
+                return x + vx < 5 || x + vx > BallPanel.this.getWidth() - 5;
+            }
+
+            @Override
+            public boolean collidingY() {
+                return y + vy < 5 || y + vy > BallPanel.this.getHeight() - 5;
+            }
+        };
+        ballList.add(scheduledBall);
+
+        VThreadBall vThreadBall = new VThreadBall(
+                getWidth() / 2, getHeight() / 2
+        ) {
+            @Override
+            public boolean collidingX() {
+                return x + vx < 5 || x + vx > BallPanel.this.getWidth() - 5;
+            }
+
+            @Override
+            public boolean collidingY() {
+                return y + vy < 5 || y + vy > BallPanel.this.getHeight() - 5;
+            }
+        };
+        ballList.add(vThreadBall);
+
+        VsThreadBall vsThreadBall = new VsThreadBall(
+                getWidth() / 2, getHeight() / 2
+        ) {
+            @Override
+            public boolean collidingX() {
+                return x + vx < 5 || x + vx > BallPanel.this.getWidth() - 5;
+            }
+
+            @Override
+            public boolean collidingY() {
+                return y + vy < 5 || y + vy > BallPanel.this.getHeight() - 5;
+            }
+        };
+        ballList.add(vsThreadBall);
     }
 
     @Override
@@ -51,8 +98,11 @@ public class BallPanel extends Panel
     }
 
     public void shake() {
-        synchronized (Ball.MONITOR) {
-            Ball.MONITOR.notifyAll();
+        synchronized (ThreadBall.MONITOR) {
+            ThreadBall.MONITOR.notifyAll();
         }
+
+        for (Ball ball : ballList)
+            ball.wakeUp();
     }
 }
