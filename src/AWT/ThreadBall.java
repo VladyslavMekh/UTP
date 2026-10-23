@@ -61,8 +61,6 @@ public abstract class ThreadBall extends Ball {
     }
 
     public void wakeUp() {
-//        synchronized (MONITOR) {
-//            thread.notifyAll();
-//        }
+
     }
 }

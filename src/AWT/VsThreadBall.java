@@ -25,27 +25,24 @@ public abstract class VsThreadBall extends VBall {
     public void run() {
         while (true) {
             try {
-                semaphore.acquire();
+                semaphore.release();
 
                 if (collidingX()) {
                     vx *= -1;
-                    semaphore.release();
-                    continue;
+                    semaphore.acquire();
                 }
 
                 if (collidingY()) {
                     vy *= -1;
-                    semaphore.release();
-                    continue;
+                    semaphore.acquire();
                 }
 
                 x += vx;
                 y += vy;
 
-                semaphore.release();
                 Thread.sleep(speed);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Thread.currentThread().interrupt();
             }
         }
     }
