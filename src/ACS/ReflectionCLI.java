@@ -40,7 +40,8 @@ public class ReflectionCLI {
                 field,
                 Modifier.toString(field.getModifiers()),
                 field.getName(),
-                "Type: " + field.getType().getSimpleName()
+                "Type: " + field.getType().getSimpleName(),
+                "Generic Type: " + field.getGenericType()
         };
     }
 

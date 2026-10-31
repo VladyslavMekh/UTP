@@ -1,5 +1,7 @@
 package ACS;
 
+import ACS.ui.theme.ThemeColors;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -26,12 +28,22 @@ public class ObjectInspector extends JFrame {
         setTitle("Object Inspector");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        setBackground(ThemeColors.BACKGROUND);
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout());
 
         JButton loadButton = new JButton("Select file .class");
+        loadButton.setBackground(new Color(80, 100, 220));
+        loadButton.setForeground(ThemeColors.TEXT);
+        loadButton.setFont(new Font("Arial", Font.BOLD, 14));
+        loadButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
         JButton clearButton = new JButton("Clear");
+        clearButton.setBackground(new Color(80, 100, 220));
+        loadButton.setForeground(ThemeColors.TEXT);
+        clearButton.setFont(new Font("Arial", Font.BOLD, 14));
+        clearButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         loadButton.addActionListener(e -> loadClassFile());
         clearButton.addActionListener(e -> clearTable());
